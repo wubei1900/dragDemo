@@ -1,0 +1,48 @@
+@charset "UTF-8";
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.contain {
+    display: flex;
+    flex-direction: row;
+}
+
+.contain .dustbin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    border: 2px solid gray;
+    font-size: 25px;
+    min-height: 250px;
+    font-weight: bolder;
+    -webkit-user-select: none;
+}
+
+.contain .list {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    align-items: flex-start;
+}
+
+.contain .list li{
+    border: 1px solid darkslategray;
+    margin: 5px;
+    width: 200px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    -webkit-user-select: none;
+    font-size: 20px;
+    font-weight: bolder;
+    cursor: move;
+}
+
+.contain .list li:hover {
+    background: dodgerblue;
+    color: #fff;
+}
