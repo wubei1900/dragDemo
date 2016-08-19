@@ -1,0 +1,3 @@
+[submodule "themes/next-plus"]
+	path = themes/next-plus
+	url = git@gitlab.4399.com:blog/hexo-theme-next-plus.git

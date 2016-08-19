@@ -1,0 +1,56 @@
+before_script:
+    - npm config set proxy http://ss.4399doc.com:8080
+    - npm install
+
+stages:
+    - deploy
+
+job1:
+    stage: deploy
+    script:
+        - echo 'BUILDING'
+        - rm -rfv db.json public
+        - git submodule init && git submodule update
+        - npm run generate
+
+        - echo 'PACKAGING'
+        - export TEMP=`mktemp`
+        - tar cvf $TEMP public
+        - rm -rfv db.json public
+
+        - echo 'SWITCHING TO DEPLOY BRANCH'
+        - git config --global user.name 'deploy'
+        - git config --global user.email 'deploy@gitlab.4399.com'
+
+        - git reset --hard HEAD
+
+        - git branch -D pages || true
+        - git checkout -b pages
+
+        - git reset --hard origin/pages
+
+        - git branch -u origin/pages
+        - git pull origin --force
+
+        - echo 'PUSHING PACKAGE TO DEPLOY BRANCH'
+        - rm -rfv public
+        - tar xvf $TEMP
+
+        - git branch -a
+        - git status
+        - git add public
+        - git status
+        - git commit -am 'Update site'
+        - git remote set-url --push origin $(echo $CI_BUILD_REPO | perl -pe 's#.*@(.+?(\:\d+)?)/#git@\1:#')
+        - git push origin pages
+
+        - echo 'CLEANING UP'
+        - rm -rfv $TEMP
+
+    only:
+        - master
+    tags:
+        - node
+
+cache:
+    untracked: true
